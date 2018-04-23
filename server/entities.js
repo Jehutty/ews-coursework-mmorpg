@@ -67,13 +67,14 @@ Entity.getFrameUpdates=function(){
 //player class
 Player = function(params){
     var self = Entity(params);
-    self.username = params.username;
-    self.number= "" + Math.floor(10* Math.random());
+    self.username = params.username;    //username of the player retrieved from database.
+    self.number= "" + Math.floor(10* Math.random()); // for testing purposes
     self.pressingRight= false;
     self.pressingLeft= false;
     self.pressingUp=false;
     self.pressingDown= false;
     self.pressingAttack=false;
+    self.walking = false;
     self.mouseAngle =0;
     self.maxVelocity= 10;
     self.hp = 10;
@@ -81,13 +82,13 @@ Player = function(params){
     self.score = 0;
     self.timer =0;
     self.inventory = new Inventory(params.progress.items,params.socket, true);
-
+    self.model = 'default';
+    self.hurt = false;
 
     var super_update = self.update;
     self.update = function(){
         self.updateSpeed();
         super_update();
-
         if (self.pressingAttack){
             self.shootProjectile(self.mouseAngle);
         }
@@ -110,8 +111,9 @@ Player = function(params){
         }
 
     }
-
     self.updateSpeed = function(){
+        self.walking = false;
+
         if(self.pressingRight)
             if(self.x > 1250) {
                 self.speedX = 0;
@@ -120,19 +122,20 @@ Player = function(params){
                 self.speedX = self.maxVelocity;
             }
         else if(self.pressingLeft)
-
             if(self.x < 30) {
                 self.speedX = 0;
             }
             else{
                 self.speedX = -self.maxVelocity;
             }
-        else
+        else {
             self.speedX = 0;
+        }
 
         if(self.pressingUp)
             if(self.y < 0) {
                 self.speedY = 0;
+
             }
             else{
                 self.speedY = -self.maxVelocity;
@@ -140,12 +143,18 @@ Player = function(params){
         else if(self.pressingDown)
             if(self.y > 680) {
                 self.speedY = 0;
+
             }
             else{
                 self.speedY = self.maxVelocity;
             }
-        else
+        else{
             self.speedY = 0;
+        }
+
+        if(! (self.speedY === 0 && self.speedX === 0) )
+            self.walking = true;
+
     }
 
     self.getInitPack = function(){
@@ -158,6 +167,9 @@ Player = function(params){
             maxHp:self.maxHp,
             score:self.score,
             map:self.map,
+            walking:self.walking,
+            model:self.model,
+            hurt: self.hurt,
         };
     }
 
@@ -169,8 +181,11 @@ Player = function(params){
             hp:self.hp,
             score:self.score,
             map:self.map,
+            walking:self.walking,
         };
     }
+
+
 
     initPack.player.push(self.getInitPack());
     Player.list[self.id] = self;
@@ -212,6 +227,8 @@ Player.onConnect = function(socket, username, progress){
         else
             player.map = 'field';
     });
+
+
 
     socket.on('sendMessageToServer', function(data){ //data: message
         for(var i in SOCKETS_LIST){
@@ -275,6 +292,7 @@ Player.update = function(){
         player.update();
         pack.push(player.getUpdatePack());
     }
+
     return pack;
 }
 //BULLETS LOGIC
@@ -303,6 +321,7 @@ Bullet = function(params){
                     if(shooter)
                         shooter.score +=1;
                     p.hp = p.maxHp;
+                    //p.deaths++;
                     p.x = Math.random() * 500;
                     p.y = Math.random() * 500;
                 }

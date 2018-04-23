@@ -74,11 +74,32 @@ $(function(){
     Sprite.player.src = '/client/assets/sprites/wizard_fire/idle_3.png';
     Sprite.bullet = new Image();
     Sprite.bullet.src = '/client/assets/sprites/bullet2.png';
+
     Sprite.map = {};
     Sprite.map['forest'] = new Image();
     Sprite.map['forest'].src = '/client/assets/sprites/map.png';
     Sprite.map['field'] = new Image();
     Sprite.map['field'].src = '/client/assets/sprites/map2.png';
+
+    Sprite.playermodels = {};
+    Sprite.playermodels['idle_1'] = new Image();
+    Sprite.playermodels['idle_1'].src = '/client/assets/sprites/wizard_fire/idle_1.png';
+    Sprite.playermodels['idle_2'] = new Image();
+    Sprite.playermodels['idle_2'].src = '/client/assets/sprites/wizard_fire/idle_2.png';
+    Sprite.playermodels['idle_3'] = new Image();
+    Sprite.playermodels['idle_3'].src = '/client/assets/sprites/wizard_fire/idle_3.png';
+    Sprite.playermodels['idle_4'] = new Image();
+    Sprite.playermodels['idle_4'].src = '/client/assets/sprites/wizard_fire/idle_4.png';
+    Sprite.playermodels['run_1'] = new Image();
+    Sprite.playermodels['run_1'].src = '/client/assets/sprites/wizard_fire/run_1.png';
+    Sprite.playermodels['run_2'] = new Image();
+    Sprite.playermodels['run_2'].src = '/client/assets/sprites/wizard_fire/run_2.png';
+    Sprite.playermodels['run_3'] = new Image();
+    Sprite.playermodels['run_3'].src = '/client/assets/sprites/wizard_fire/run_3.png';
+    Sprite.playermodels['run_4'] = new Image();
+    Sprite.playermodels['run_4'].src = '/client/assets/sprites/wizard_fire/run_4.png';
+    Sprite.playermodels['hurt'] = new Image();
+    Sprite.playermodels['hurt'].src = '/client/assets/sprites/wizard_fire/hurt_1.png';
 
 
 //init
@@ -95,6 +116,9 @@ $(function(){
         self.maxHp = initPack.maxHp;
         self.score = initPack.score;
         self.map = initPack.map;
+        self.model = initPack.model;
+        self.walking = initPack.walking;
+        self.hurt = initPack.hurt;
         self.draw = function(){
             if(Player.list[selfId].map !== self.map)
                 return;
@@ -108,8 +132,46 @@ $(function(){
             var width = Sprite.player.width /7;
             var height = Sprite.player.height/7;
 
+            if(self.hurt){
+                self.model = 'hurt';
+                if(self.model === 'hurt'){
+                    ctx.drawImage(Sprite.playermodels['hurt'], 0,0, Sprite.player.width, Sprite.player.height, x-width/2,y-height/2, width, height);
+                }
+            }else{
+                if(!self.walking){
+                    if(self.model === 'default' || self.model === 'run_1' || self.model === 'run_2'|| self.model === 'run_3' || self.model === 'run_4'){
+                        ctx.drawImage(Sprite.playermodels['idle_1'], 0,0, Sprite.player.width, Sprite.player.height, x-width/2,y-height/2, width, height);
+                        setTimeout(function (){self.model = 'idle_1'}, 400);
+                    }
+                    if(self.model ==='idle_1'){
+                        ctx.drawImage(Sprite.playermodels['idle_2'], 0,0, Sprite.player.width, Sprite.player.height, x-width/2,y-height/2, width, height);
+                        setTimeout(function (){self.model = 'default'}, 400);
+                    }
+                }else{
+                    if(self.model === 'default' || self.model === 'idle_1') {
+                        ctx.drawImage(Sprite.playermodels['run_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                        setTimeout(function (){self.model = 'run_2'}, 150);
+                    }
+                    if(self.model === 'run_2'){
+                        ctx.drawImage(Sprite.playermodels['run_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                        setTimeout(function (){self.model = 'run_3'},150);
+                    }
+                    if(self.model === 'run_3'){
+                        ctx.drawImage(Sprite.playermodels['run_3'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                        setTimeout(function (){self.model = 'run_4'}, 150);
+                    }
+                    if(self.model === 'run_4'){
+                        ctx.drawImage(Sprite.playermodels['run_4'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                        setTimeout(function (){self.model = 'default'}, 150);
+                    }
 
-            ctx.drawImage(Sprite.player, 0,0, Sprite.player.width, Sprite.player.height, x-width/2,y-height/2, width, height);
+                }
+
+            }
+
+
+
+
             // ctx.fillText(self.number, self.x, self.y);
             // ctx.fillText(self.score, self.x, self.y-60);
         }
@@ -167,12 +229,21 @@ $(function(){
                     p.x = pack.x;
                 if(pack.y !== undefined)
                     p.y = pack.y;
-                if(pack.hp !== undefined)
+                if(pack.hp !== undefined){
+                    if(p.hp!== pack.hp){
+                        p.hurt = true;
+                    }else{
+                        p.hurt = false;
+                    }
+                    console.log(p.hurt);
                     p.hp = pack.hp;
+                }
                 if(pack.score !== undefined)
                     p.score = pack.score;
                 if(pack.map !== undefined)
                     p.map = pack.map;
+                if(pack.walking !== undefined)
+                    p.walking = pack.walking;
             }
         }
 
@@ -223,6 +294,7 @@ $(function(){
         ctx.drawImage(Sprite.map[player.map],x,y);
     }
 
+
     var lastscore = null;
     var drawScore = function(){
         if(lastscore === Player.list[selfId].score)
@@ -232,6 +304,8 @@ $(function(){
         uicanvas.fillStyle = 'black';
         uicanvas.fillText('Kill Count: ' + Player.list[selfId].score, 15 , 30);
     }
+
+
 
 
 //chat
