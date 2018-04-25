@@ -6,13 +6,14 @@ var bcrypt = require('bcrypt-nodejs');
 var UserSchema = new Schema({
     name: String,
     username: {type: String, required: true, index:{unique:true}},
-    password: {type: String, required: true, select: false}
+    password: {type: String, required: true, select: false},
+    score: Number,
 });
 
 //hash the password before the user is saved
 
 UserSchema.pre('save', function (next) {
-    var user = this;
+    var user = this; 
 
     //hash the pw only if the pw has been changed or user is new
     if(!user.isModified('password')) return next();
@@ -33,4 +34,4 @@ UserSchema.methods.comparePassword = function(password){
     return bcrypt.compareSync(password, user.password);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('userModel', UserSchema);

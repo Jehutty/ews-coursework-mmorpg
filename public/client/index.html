@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Savage Gruesome Class fights</title>
+    <base href="/app">
+    <link rel="stylesheet" type="text/css" href="client/assets/css/style.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.1/paper/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="client/shared/inventory.js"></script>
+    <script type="text/javascript" src="client/js/gamelogic.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+</head>
+<body>
+<div id="signDiv">
+    Username: <input id="signDiv-username" type="text">
+    Password: <input id="signDiv-password" type="password">
+    <button id="signDiv-login">Login</button>
+    <button id="signDiv-register">Sign Up</button>
+</div>
+
+<div id="gameDiv" style="display:inline-block;">
+
+    <div id="game-container" style="position:absolute;width:1285px; height: 720px">
+        <canvas id = "ctx-border" width="1280" height="720" style="position:absolute;border: 1px solid #000000;z-index: -1"></canvas>
+        <canvas id = "ctx" width="1280" height="720" style="position:absolute;border: 1px solid #000000;"></canvas>
+        <canvas id = "ui-canvas" width="1280" height="720" style="position: absolute;border: 1px solid #000000;"></canvas>
+
+        <div id="ui" style="position:absolute; width:1280px; height: 720px;">
+            <button id="changeMap" style="position:absolute; bottom:0px; left:0px;">
+                Change Map
+            </button>
+        </div>
+
+    </div>
+
+    <div id="chat-container" style="margin-top:725px">
+        <div id="chat" style="width:500px; height:100px; overflow-y:scroll">
+            <div></div>
+        </div>
+        <div id="inventory"></div>
+        <form id="chat-form">
+            <input id="chat-input" type="text" style="width:500px">
+        </form>
+    </div>
+
+</div>
+
+
+
+
+</body>
+
+</html>

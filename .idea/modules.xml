@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ews-coursework-mmorpg.iml" filepath="$PROJECT_DIR$/.idea/ews-coursework-mmorpg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ews-coursework.iml" filepath="$PROJECT_DIR$/.idea/ews-coursework.iml" />
     </modules>
   </component>
 </project>

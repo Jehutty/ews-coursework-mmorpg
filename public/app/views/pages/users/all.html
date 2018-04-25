@@ -1,0 +1,26 @@
+<div class="page-header">
+    <h1>
+        Users
+    </h1>
+
+</div>
+
+<div class="jumbotron text-center" ng-show="user.processing">
+    <span class="glyphicon glyphicon-repeat spinner"></span>
+    <p>Loading Users...</p>
+</div>
+
+<table class="table table-bordered table-striped" ng-show="user.users">
+    <thead>
+    <tr>
+        <th>Score</th>
+        <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="person in user.users | orderBy">
+        <td>{{ person.score }}</td>
+        <td>{{ person.username }}</td>
+    </tr>
+    </tbody>
+</table>

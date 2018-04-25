@@ -79,7 +79,7 @@ Player = function(params){
     self.maxVelocity= 10;
     self.hp = 10;
     self.maxHp = 10;
-    self.score = 0;
+    self.score = parseInt(params.progress.score);
     self.timer =0;
     self.inventory = new Inventory(params.progress.items,params.socket, true);
     self.model = 'default';
@@ -280,6 +280,7 @@ Player.onDisconnect = function(socket){
     Database.saveUserProgress({
         username:player.username,
         items:player.inventory.items,
+        score:player.score,
     });
     delete Player.list[socket.id];
     removePack.player.push(socket.id);

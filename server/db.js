@@ -2,7 +2,7 @@ var config = require('../config');
 var USE_DB = true;
 var mongojs = USE_DB ? require('mongojs') : null;
 
-var db =  USE_DB ? mongojs(config.database, ['account', 'progress']) : null;
+var db =  USE_DB ? mongojs(config.database, ['usermodels', 'account', 'progress']) : null;
 
 Database = {};
 
@@ -32,7 +32,7 @@ Database.addUser = function(data, cb){
     if(!USE_DB)
         return cb();
     db.account.insert({username:data.username, password:data.password}, function(err){
-        Database.saveUserProgress({username:data.username, items:[]}, function () {
+        Database.saveUserProgress({username:data.username, items:[], score: 0}, function () {
             cb();
         });
         cb();
@@ -43,7 +43,7 @@ Database.getUserProgress = function(username, cb){
     if(!USE_DB)
         return cb({items:[]});
     db.progress.findOne({username:username}, function (err, res) {
-        cb({items:res.items});
+        cb({items:res.items, score:res.score});
     });
 }
 
@@ -53,4 +53,5 @@ Database.saveUserProgress = function (data, cb) {
     if(!USE_DB)
         return cb();
     db.progress.update({username:data.username}, data , {upsert:true}, cb);
+    db.usermodels.update({username:data.username}, {$set: {score: data.score} }, cb);
 }

@@ -1,19 +1,18 @@
 {
-  "name": "ews-coursework-mmorpg",
+  "name": "ews-coursework",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
-  },
-  "engines": {
-    "node": "8.11.x"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "angular": "^1.6.10",
     "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
     "mongojs": "^2.5.0",

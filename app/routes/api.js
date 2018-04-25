@@ -2,69 +2,46 @@ var bodyParser = require('body-parser'); // get body-parser
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var config = require('../../config');
+var USE_DB = true;
+var mongojs = USE_DB ? require('mongojs') : null;
+var cookie = require('cookie-parser');
 
+var db =  USE_DB ? mongojs(config.database, ['usermodels', 'account', 'progress']) : null;
 // super secret for creating tokens
 var superSecret = config.secret;
 
 module.exports = function(app, express) {
 
     var apiRouter = express.Router();
-    // create a user (accessed at POST http://localhost:8080/users)
+
+    // route to generate sample user
     apiRouter.post('/register', function(req, res) {
 
-        var user = new User(); // create a new instance of the User model
-        user.name = req.body.name; // set the users name (comes from the request)
-        user.username = req.body.username; // set the users username (comes from the request)
-        user.password = req.body.password; // set the users password (comes from the request)
+            var user = new User(); // create a new instance of the User model
+            user.name = req.body.name; // set the users name (comes from the request)
+            user.username = req.body.username; // set the users username (comes from the request)
+            user.password = req.body.password; // set the users password (comes from the request)
+            user.score = 0;
 
-        user.save(function(err) {
-            if (err) {
-                // duplicate entry
-                if (err.code == 11000)
-                    return res.json({
-                        success: false,
-                        message: 'A user with that username already exists. '
-                    });
-                else
-                    return res.send(err);
-            }
+            user.save(function(err) {
+                if (err) {
+                    // duplicate entry
+                    if (err.code == 11000)
+                        return res.json({
+                            success: false,
+                            message: 'A user with that username already exists. '
+                        });
+                    else
+                        return res.send(err);
+                }
 
-            // return a message
-            res.json({
-                message: 'User created!'
+                // return a message
+                res.json({
+                    message: 'User created!'
+                });
             });
+
         });
-
-    });
-
-    // // route to generate sample user
-    // apiRouter.post('/sample', function(req, res) {
-    //
-    //     // look for the user named chris
-    //     User.findOne({
-    //         'username': 'chris'
-    //     }, function(err, user) {
-    //
-    //         // if there is no chris user, create one
-    //         if (!user) {
-    //             var sampleUser = new User();
-    //
-    //             sampleUser.name = 'Chris';
-    //             sampleUser.username = 'chris';
-    //             sampleUser.password = 'supersecret';
-    //
-    //             sampleUser.save();
-    //         } else {
-    //             console.log(user);
-    //
-    //             // if there is a chris, update his password
-    //             user.password = 'supersecret';
-    //             user.save();
-    //         }
-    //
-    //     });
-    //
-    // });
 
     // route to authenticate a user (POST http://localhost:8080/api/authenticate)
     apiRouter.post('/authenticate', function(req, res) {
@@ -102,12 +79,15 @@ module.exports = function(app, express) {
                         expiresIn: '24h' // expires in 24 hours
                     });
 
+                    console.log(" THIS IS MY TOKEN ------------ "  + token);
                     // return the information including token as JSON
+                    res.cookie('Username', user.username);
                     res.json({
                         success: true,
                         message: 'Enjoy your token!',
                         token: token
                     });
+
                 }
 
             }

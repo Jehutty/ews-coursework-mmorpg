@@ -1,45 +1,82 @@
+// BASE SETUP
+// ======================================
 require('./server/entities');
-require('./client/shared/inventory');
+require('./public/client/shared/inventory');
 require('./server/db');
-var express = require('express');
-var mongojs = require('mongojs');
-var app = express();
-var serv = require('http').Server(app);
-var io = require('socket.io')(serv, {});
-var mongoose = require('mongoose');
-var config = require('./config');
+// CALL THE PACKAGES --------------------
+var express = require('express'); // call express
+var app = express(); // define our app using express
 var bodyParser = require('body-parser'); // get body-parser
 var morgan = require('morgan'); // used to see requests
+var mongoose = require('mongoose');
+var config = require('./config');
 var path = require('path');
 
+
+
+
+var serv = require('http').Server(app);
+var io = require('socket.io')(serv, {});
+
+// APP CONFIGURATION ==================
+// ====================================
+// use body parser so we can grab information from POST requests
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
+// configure our app to handle CORS requests
+app.use(function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+    next();
+});
+
 // log all requests to the console
+// app.use(morgan('dev'));
 
-// mongoose.connect(config.database);
-
+// connect to our database (hosted on modulus.io)
+mongoose.connect(config.database);
 
 // set static files location
 // used for requests that our frontend will make
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/client/index.html');
+app.use(express.static(__dirname + '/public'));
+// app.use('/game', function(req,res){
+//     res.sendfile(__dirname + '/public/client/index.html');
+// });
+// ROUTES FOR OUR API =================
+// ====================================
+
+// API ROUTES ------------------------
+var apiRoutes = require('./app/routes/api')(app, express);
+app.use('/api', apiRoutes);
+
+// MAIN CATCHALL ROUTE ---------------
+// SEND USERS TO FRONTEND ------------
+// has to be registered after API ROUTES
+app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
 });
-app.use('/client', express.static(__dirname + '/client'));
-
-serv.listen(process.env.PORT || config.port);
-
-console.log("Super gruesome rpg game on 8000");
 
 
-//socket handling emits/listens
-
+// START THE SERVER
+// ====================================
+serv.listen(process.env.port || config.port);
+console.log('Magic happens on port ' + config.port);
 
 var SOCKETS_LIST = Entity.getSocketList();
 var DEBUG = true;
 
 io.sockets.on('connection', function (socket) {
+
+
     console.log('new socket connection');
     socket.id = Math.random();
 
     SOCKETS_LIST[socket.id] = socket;
+
 
 
 
@@ -72,7 +109,7 @@ io.sockets.on('connection', function (socket) {
         Player.onDisconnect(socket);
     });
 
-    
+
     socket.on('evalServer', function (data) {
         if(!DEBUG)
             return;
