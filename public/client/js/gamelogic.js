@@ -1,27 +1,28 @@
 
 $(function(){
     console.log(document.getElementById('ctx-border'));
-   
+    if(document.getElementById('ctx-border')!==null) {
 
 
             var WIDTH = 1280;
             var HEIGHT = 720;
             var socket = io();
 //sign
-//     var userinfoDiv = document.getElementById('signDiv');
+    var playDiv = document.getElementById('playDiv');
 //     var userinfoUsername = document.getElementById('signDiv-username');
 //     var userinfoPassword = document.getElementById('signDiv-password');
 //     var userinfoLoginBtn = document.getElementById('signDiv-login');
 //     var userinfoRegisterBtn = document.getElementById('signDiv-register');
+            var playbutton = document.getElementById('playBtn');
             var changeMapBtn = document.getElementById('changeMap');
             var ctxBorder = document.getElementById('ctx-border').getContext("2d");
 
             var username = document.cookie.slice(document.cookie.indexOf('=') + 1);
             console.log(username)
 
-            // userinfoLoginBtn.onclick = function(){
-            //     socket.emit('signIn', {username:userinfoUsername.value, password:userinfoPassword.value});
-            // }
+              playbutton.onclick = function(){
+                socket.emit('signIn', {username:username});
+             }
             //
             // userinfoRegisterBtn.onclick = function(){
             //     socket.emit('signUp', {username:userinfoUsername.value, password:userinfoPassword.value});
@@ -34,14 +35,12 @@ $(function(){
             }
 
 
-            // socket.on('signInResponse', function (data) {
-            //     if (data.success) {
-            //         userinfoDiv.style.display = 'none';
-            //         document.getElementById('gameDiv').style.display = 'inline-block';
-            //     } else {
-            //         alert("sign in unsuccessful");
-            //     }
-            // });
+            socket.on('signInResponse', function (data) {
+                if (data.success) {
+                    playDiv.style.display = 'none';
+                    document.getElementById('gameDiv').style.display = 'inline-block';
+                }
+            });
             //
             // socket.on('signUpResponse', function (data) {
             //     if (data.success) {
@@ -399,6 +398,6 @@ $(function(){
 
 
 
-
+    }
 
 });

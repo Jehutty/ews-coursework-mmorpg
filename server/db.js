@@ -31,7 +31,7 @@ Database.isUsernameTaken = function(data, cb){
 Database.addUser = function(data, cb){
     if(!USE_DB)
         return cb();
-    db.account.insert({username:data.username, password:data.password}, function(err){
+    db.account.insert({username:data.username}, function(err){
         Database.saveUserProgress({username:data.username, items:[], score: 0}, function () {
             cb();
         });

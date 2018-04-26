@@ -73,33 +73,31 @@ io.sockets.on('connection', function (socket) {
 
 
     console.log('new socket connection');
-    socket.id = Math.random();
 
-    SOCKETS_LIST[socket.id] = socket;
 
 
 
 
     socket.on('signIn', function (data) {
-        Database.isValidPassword(data, function(res){
-            if(!res)
-                return socket.emit('signInResponse', {success:false});
-            Database.getUserProgress(data.username, function(progress){
-                Player.onConnect(socket, data.username, progress);
-                socket.emit('signInResponse', {success:true});
-            });
-        });
-    });
+        socket.id = data.username;
 
-    socket.on('signUp', function (data) {
+        SOCKETS_LIST[socket.id] = socket;
         Database.isUsernameTaken(data, function(res){
-            if(res){
-                socket.emit('signUpResponse', {success:false});
-            }else{
+            if(!res){
                 Database.addUser(data, function(){
-                    socket.emit('signUpResponse', {success:true});
+                    Database.getUserProgress(data.username, function(progress){
+                        Player.onConnect(socket, data.username, progress);
+                        socket.emit('signInResponse', {success:true});
+                    });
+                });
+
+            }else{
+                Database.getUserProgress(data.username, function(progress){
+                    Player.onConnect(socket, data.username, progress);
+                    socket.emit('signInResponse', {success:true});
                 });
             }
+
         });
     });
 
