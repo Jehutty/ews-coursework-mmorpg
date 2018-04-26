@@ -388,8 +388,8 @@ $(function(){
             document.onmousemove = function (event) {
                 var width =  document.body.clientWidth;
                 var height =  document.body.clientHeight;
-                var x = -width + event.clientX - 8;
-                var y = -height + event.clientY - 8;
+                var x = -(width/2) + event.clientX - 8;
+                var y = -(height/2) + event.clientY - 8;
                 var angle = Math.atan2(y, x) / Math.PI * 180;
                 socket.emit('keyPress', {inputId: 'mouseAngle', state: angle});
             }
