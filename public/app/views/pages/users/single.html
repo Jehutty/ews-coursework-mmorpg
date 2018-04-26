@@ -32,15 +32,14 @@
             <!--<button type="submit" class="btn btn-success btn-lg btn-block" ng-if="user.type == 'edit'">Update User</button>-->
         </div>
     </div>
+    <div class="row show-hide-message" ng-show="user.message">
+        <div class="col-sm-6 col-sm-offset-2">
 
+            <div class="alert alert-info">
+                {{ user.message }}
+            </div>
+
+        </div>
+    </div>
 </form>
 
-<div class="row show-hide-message" ng-show="user.message">
-    <div class="col-sm-6 col-sm-offset-2">
-
-        <div class="alert alert-info">
-            {{ user.message }}
-        </div>
-
-    </div>
-</div>

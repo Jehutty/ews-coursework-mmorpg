@@ -35,7 +35,7 @@ angular.module('mainCtrl', [])
 
                     // if a user successfully logs in, redirect to users page
                     if (data.success)
-                       $location.path('/game');
+                       $window.location.href='/game';
                     else
                         vm.error = data.message;
 

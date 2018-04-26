@@ -43,7 +43,7 @@ angular.module('app.routes', ['ngRoute'])
                 controllerAs: 'user'
             })
             .when('/game', {
-                templateUrl: 'client/index.html',
+                templateUrl: 'client/game.html',
                 controller: 'userController',
                 controllerAs: 'user'
             });

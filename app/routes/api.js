@@ -15,7 +15,7 @@ module.exports = function(app, express) {
     var apiRouter = express.Router();
 
     // route to generate sample user
-    apiRouter.post('/register', function(req, res) {
+    apiRouter.post('/register', function(req, res, next) {
 
             var user = new User(); // create a new instance of the User model
             user.name = req.body.name; // set the users name (comes from the request)
@@ -27,6 +27,7 @@ module.exports = function(app, express) {
                 if (err) {
                     // duplicate entry
                     if (err.code == 11000)
+
                         return res.json({
                             success: false,
                             message: 'A user with that username already exists. '
@@ -39,6 +40,7 @@ module.exports = function(app, express) {
                 res.json({
                     message: 'User created!'
                 });
+
             });
 
         });
