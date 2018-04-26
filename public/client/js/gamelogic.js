@@ -1,7 +1,7 @@
 
 $(function(){
     console.log(document.getElementById('ctx-border'));
-    if(document.getElementById('ctx-border')!==null) {
+   
 
 
             var WIDTH = 1280;
@@ -399,6 +399,6 @@ $(function(){
 
 
 
-    }
+
 
 });
