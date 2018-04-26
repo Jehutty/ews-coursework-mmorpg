@@ -63,7 +63,7 @@ app.get('*', function(req, res) {
 
 // START THE SERVER
 // ====================================
-serv.listen(process.env.port || config.port);
+serv.listen(process.env.port);
 console.log('Magic happens on port ' + config.port);
 
 var SOCKETS_LIST = Entity.getSocketList();
