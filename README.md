@@ -130,4 +130,11 @@ A kill death ratio implementation on the leaderboards.
 Other object entities that players could take cover from and destroy after hitting them a certain amount of times.
 Add damage models depending on the player's level.
 
-
+TO INSTALL IT 
+Download/clone repository on a directory on your machine
+Install node and npm if you dont have them https://nodejs.org/en/
+run npm install from a command line in the directory 
+after its done installing, install nodemon by typing
+npm install nodemon -g
+then from the command line cd to your directory and type nodemon start
+the application will become available on localhost:8000
