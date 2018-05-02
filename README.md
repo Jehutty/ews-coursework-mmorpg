@@ -60,7 +60,7 @@ after level 6 the user transforms to an arcane wizard.
 
 
 
-
+#Social interaction:
 # CHAT:
 The player is able to communicate with other players using the chat
 All messages sent from the chat are being broadcasted to all the players in the game.
