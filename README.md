@@ -47,7 +47,7 @@ on your controllers. The directive function is highly complicated and depends on
 
 
 
-LEVELING SYSTEM:
+# LEVELING SYSTEM:
 His/her character starts as level 0 and as a fire wizard
 when the user kills other players he receives a score increment and experience points
 upon reaching a certain amount of experience points he gains a level 
@@ -58,8 +58,9 @@ after level 6 the user transforms to an arcane wizard.
 
 
 
-CHAT:
+# CHAT:
 The player is able to communicate with other players using the chat
+All messages sent from the chat are being broadcasted to all the players in the game.
 A player can send a private message to another player currently in the game by using 
 the following pattern when writing a message
 
@@ -74,7 +75,7 @@ he gets notified that this player is not online.
 
 --if the syntax of the private message is not correct it might crash the instance for the player.
 
-ANIMATIONS:
+# ANIMATIONS:
 The player's character is using a finite state model system
 If the character is idle (not moving)
 The character's model is changing based on a 2 step loop state
@@ -88,13 +89,13 @@ If the character is moving then his model uses a 4 step loop state
 
 
 
-PLAYER MOVEMENT:
+# PLAYER MOVEMENT:
 The player is unable to move outside the boundaries of the map.
 --This is working as it should and no bugs were found.
 
 
 
-LEADERBOARDS
+# LEADERBOARDS:
 There is a route in the system where the users can see the score of other players.
 --The path is built in Angular, users are displayed but are not sorted depending on their score but in alphabetical order of their username
 --Could not find out how Angular sorts html elements depending on certain conditions. I tried using the ng-sort function but to no avail.
@@ -103,14 +104,14 @@ thus can't target it's elements before they are loaded.
 
 
 
-ITEMS
+# ITEMS:
 The player's character has an inventory that holds items 
 --I could only add items but was not able to use them.
 --For some reason when i try to click on the button that represents an item and fire off a socket emit event, so that the server gets notified and the player's
 character gets updated depending on the use of the item, the function was not being registered.
 
 
-MAP INSTANCES
+# MAP INSTANCES:
 The game implements two different maps used as game instances.
 A player is able to change the map by clicking the "Change Map" button in the game canvas.
 The player is only able to see and interact with players that are on the same map instance.
@@ -120,7 +121,7 @@ The player is only able to see and interact with players that are on the same ma
 
 
 
-#Functionality to be added
+# Functionality to be added
 I would like to introduce a marketplace so that users can buy items or unlock abilities depending on their level
 A kill death ratio implementation on the leaderboards.
 Other entities that players could take cover from.
