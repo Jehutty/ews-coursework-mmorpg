@@ -1,5 +1,8 @@
+# CM4025 Enterprise web systems coursework:
+
 # Wizard Brawl MMORPG
 
+OVERVIEW:
 This project is a full MEAN stack app, it uses Node.js as a server, uses the Express framework to deliver files to the front end
 It uses Angular.js for the front end routing with controllers and services.
 For the authentication system Angular is using the API routes that connect and retrieve data from the MongoDB hosted on mlabs
@@ -46,7 +49,7 @@ it wasn't working. After extensive research I found out that in order to load jQ
 on your controllers. The directive function is highly complicated and depends on the model you build your controllers upon, thus I wasn't able to implement it.
 
 
-
+# Progression:
 # LEVELING SYSTEM:
 His/her character starts as level 0 and as a fire wizard
 when the user kills other players he receives a score increment and experience points
@@ -125,5 +128,6 @@ The player is only able to see and interact with players that are on the same ma
 I would like to introduce a marketplace so that users can buy items or unlock abilities depending on their level
 A kill death ratio implementation on the leaderboards.
 Other object entities that players could take cover from and destroy after hitting them a certain amount of times.
+Add damage models depending on the player's level.
 
 
