@@ -55,10 +55,12 @@ app.use('/api', apiRoutes);
 
 // MAIN CATCHALL ROUTE ---------------
 // SEND USERS TO FRONTEND ------------
-// has to be registered after API ROUTES
 app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
 });
+
+//on logout
+
 
 
 // START THE SERVER
@@ -66,7 +68,10 @@ app.get('*', function(req, res) {
 serv.listen(process.env.PORT|| config.port);
 console.log('Magic happens on port ' + config.port);
 
-var SOCKETS_LIST = Entity.getSocketList();
+
+SOCKETS_LIST = Entity.getSocketList();
+
+
 var DEBUG = true;
 
 io.sockets.on('connection', function (socket) {
@@ -106,6 +111,7 @@ io.sockets.on('connection', function (socket) {
         delete SOCKETS_LIST[socket.id];
         Player.onDisconnect(socket);
     });
+
 
 
     socket.on('evalServer', function (data) {

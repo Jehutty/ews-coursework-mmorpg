@@ -84,6 +84,19 @@ Player = function(params){
     self.inventory = new Inventory(params.progress.items,params.socket, true);
     self.model = 'default';
     self.hurt = false;
+    if(params.progress.level!=null){
+        self.level = parseInt(params.progress.level);
+    }else{
+        self.level =0;
+    }
+    if(params.progress.level!=null){
+        self.experience = parseInt(params.progress.experience);
+    }else{
+        self.experience = 0;
+    }
+
+
+
 
     var super_update = self.update;
     self.update = function(){
@@ -170,6 +183,8 @@ Player = function(params){
             walking:self.walking,
             model:self.model,
             hurt: self.hurt,
+            level: self.level,
+            experience: self.experience,
         };
     }
 
@@ -182,6 +197,8 @@ Player = function(params){
             score:self.score,
             map:self.map,
             walking:self.walking,
+            level:self.level,
+            experience:self.experience,
         };
     }
 
@@ -281,6 +298,8 @@ Player.onDisconnect = function(socket){
         username:player.username,
         items:player.inventory.items,
         score:player.score,
+        experience:player.experience,
+        level:player.level,
     });
     delete Player.list[socket.id];
     removePack.player.push(socket.id);
@@ -321,6 +340,11 @@ Bullet = function(params){
                     var shooter = Player.list[self.parent];
                     if(shooter)
                         shooter.score +=1;
+                        shooter.experience +=50;
+                        if(shooter.experience>=100){
+                            shooter.level+=1;
+                            shooter.experience=0;
+                        }
                     p.hp = p.maxHp;
                     //p.deaths++;
                     p.x = Math.random() * 500;

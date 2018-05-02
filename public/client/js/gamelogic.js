@@ -9,27 +9,19 @@ $(function(){
             var socket = io();
 //sign
     var playDiv = document.getElementById('playDiv');
-//     var userinfoUsername = document.getElementById('signDiv-username');
-//     var userinfoPassword = document.getElementById('signDiv-password');
-//     var userinfoLoginBtn = document.getElementById('signDiv-login');
-//     var userinfoRegisterBtn = document.getElementById('signDiv-register');
+
             var playbutton = document.getElementById('playBtn');
             var changeMapBtn = document.getElementById('changeMap');
             var ctxBorder = document.getElementById('ctx-border').getContext("2d");
-
             var username = document.cookie.slice(document.cookie.indexOf('=') + 1);
             console.log(username)
 
               playbutton.onclick = function(){
                 socket.emit('signIn', {username:username});
              }
-            //
-            // userinfoRegisterBtn.onclick = function(){
-            //     socket.emit('signUp', {username:userinfoUsername.value, password:userinfoPassword.value});
-            // }
 
             var background = new Image();
-            background.src = "/client/assets/sprites/map_background.png";
+            background.src = "/client/assets/sprites/map_background2.png";
             background.onload = function () {
                 ctxBorder.drawImage(background, 0, 0, 2000, 2000);
             }
@@ -41,14 +33,7 @@ $(function(){
                     document.getElementById('gameDiv').style.display = 'inline-block';
                 }
             });
-            //
-            // socket.on('signUpResponse', function (data) {
-            //     if (data.success) {
-            //         alert("sign up successful");
-            //     } else {
-            //         alert("sign up unsuccessful");
-            //     }
-            // });
+
 
 //USER INTERFACE
             var changeMap = function () {
@@ -58,11 +43,13 @@ $(function(){
                 changeMap();
             }
 
-            var inventory = new Inventory(socket, false);
+            var inventory = new Inventory(null, socket, false);
             socket.on('updateInventory', function (items) {
                 inventory.items = items;
                 inventory.refreshRender();
             });
+
+
 
 
 //GAME
@@ -72,38 +59,80 @@ $(function(){
             var chatForm = document.getElementById('chat-form');
             var chatInput = document.getElementById('chat-input');
             uicanvas.font = '30px Arial';
-
+//SPRITES
             var Sprite = {};
             Sprite.player = new Image();
             Sprite.player.src = '/client/assets/sprites/wizard_fire/idle_3.png';
             Sprite.bullet = new Image();
             Sprite.bullet.src = '/client/assets/sprites/bullet2.png';
+            Sprite.bullet2 = new Image();
+            Sprite.bullet2.src = '/client/assets/sprites/bullet3.png';
+            Sprite.bullet3 = new Image();
+            Sprite.bullet3.src = '/client/assets/sprites/bullet.png';
 
-            Sprite.map = {};
+        Sprite.map = {};
             Sprite.map['forest'] = new Image();
             Sprite.map['forest'].src = '/client/assets/sprites/map.png';
             Sprite.map['field'] = new Image();
             Sprite.map['field'].src = '/client/assets/sprites/map2.png';
 
-            Sprite.playermodels = {};
-            Sprite.playermodels['idle_1'] = new Image();
-            Sprite.playermodels['idle_1'].src = '/client/assets/sprites/wizard_fire/idle_1.png';
-            Sprite.playermodels['idle_2'] = new Image();
-            Sprite.playermodels['idle_2'].src = '/client/assets/sprites/wizard_fire/idle_2.png';
-            Sprite.playermodels['idle_3'] = new Image();
-            Sprite.playermodels['idle_3'].src = '/client/assets/sprites/wizard_fire/idle_3.png';
-            Sprite.playermodels['idle_4'] = new Image();
-            Sprite.playermodels['idle_4'].src = '/client/assets/sprites/wizard_fire/idle_4.png';
-            Sprite.playermodels['run_1'] = new Image();
-            Sprite.playermodels['run_1'].src = '/client/assets/sprites/wizard_fire/run_1.png';
-            Sprite.playermodels['run_2'] = new Image();
-            Sprite.playermodels['run_2'].src = '/client/assets/sprites/wizard_fire/run_2.png';
-            Sprite.playermodels['run_3'] = new Image();
-            Sprite.playermodels['run_3'].src = '/client/assets/sprites/wizard_fire/run_3.png';
-            Sprite.playermodels['run_4'] = new Image();
-            Sprite.playermodels['run_4'].src = '/client/assets/sprites/wizard_fire/run_4.png';
-            Sprite.playermodels['hurt'] = new Image();
-            Sprite.playermodels['hurt'].src = '/client/assets/sprites/wizard_fire/hurt_1.png';
+            Sprite.playermodels_fire = {};
+            Sprite.playermodels_fire['idle_1'] = new Image();
+            Sprite.playermodels_fire['idle_1'].src = '/client/assets/sprites/wizard_fire/idle_1.png';
+            Sprite.playermodels_fire['idle_2'] = new Image();
+            Sprite.playermodels_fire['idle_2'].src = '/client/assets/sprites/wizard_fire/idle_2.png';
+            Sprite.playermodels_fire['idle_3'] = new Image();
+            Sprite.playermodels_fire['idle_3'].src = '/client/assets/sprites/wizard_fire/idle_3.png';
+            Sprite.playermodels_fire['idle_4'] = new Image();
+            Sprite.playermodels_fire['idle_4'].src = '/client/assets/sprites/wizard_fire/idle_4.png';
+            Sprite.playermodels_fire['run_1'] = new Image();
+            Sprite.playermodels_fire['run_1'].src = '/client/assets/sprites/wizard_fire/run_1.png';
+            Sprite.playermodels_fire['run_2'] = new Image();
+            Sprite.playermodels_fire['run_2'].src = '/client/assets/sprites/wizard_fire/run_2.png';
+            Sprite.playermodels_fire['run_3'] = new Image();
+            Sprite.playermodels_fire['run_3'].src = '/client/assets/sprites/wizard_fire/run_3.png';
+            Sprite.playermodels_fire['run_4'] = new Image();
+            Sprite.playermodels_fire['run_4'].src = '/client/assets/sprites/wizard_fire/run_4.png';
+            Sprite.playermodels_fire['hurt'] = new Image();
+            Sprite.playermodels_fire['hurt'].src = '/client/assets/sprites/wizard_fire/hurt_1.png';
+
+            Sprite.playermodels_frost = {};
+            Sprite.playermodels_frost['idle_1'] = new Image();
+            Sprite.playermodels_frost['idle_1'].src = '/client/assets/sprites/wizard_ice/idle_1.png';
+            Sprite.playermodels_frost['idle_2'] = new Image();
+            Sprite.playermodels_frost['idle_2'].src = '/client/assets/sprites/wizard_ice/idle_2.png';
+            Sprite.playermodels_frost['idle_3'] = new Image();
+            Sprite.playermodels_frost['idle_3'].src = '/client/assets/sprites/wizard_ice/idle_3.png';
+            Sprite.playermodels_frost['idle_4'] = new Image();
+            Sprite.playermodels_frost['idle_4'].src = '/client/assets/sprites/wizard_ice/idle_4.png';
+            Sprite.playermodels_frost['run_1'] = new Image();
+            Sprite.playermodels_frost['run_1'].src = '/client/assets/sprites/wizard_ice/run_1.png';
+            Sprite.playermodels_frost['run_2'] = new Image();
+            Sprite.playermodels_frost['run_2'].src = '/client/assets/sprites/wizard_ice/run_2.png';
+            Sprite.playermodels_frost['run_3'] = new Image();
+            Sprite.playermodels_frost['run_3'].src = '/client/assets/sprites/wizard_ice/run_3.png';
+            Sprite.playermodels_frost['run_4'] = new Image();
+            Sprite.playermodels_frost['run_4'].src = '/client/assets/sprites/wizard_ice/run_4.png';
+            Sprite.playermodels_frost['hurt'] = new Image();
+            Sprite.playermodels_frost['hurt'].src = '/client/assets/sprites/wizard_ice/hurt_1.png';
+
+            Sprite.playermodels_arcane = {};
+            Sprite.playermodels_arcane['idle_1'] = new Image();
+            Sprite.playermodels_arcane['idle_1'].src = '/client/assets/sprites/wizard_arcane/idle_1.png';
+            Sprite.playermodels_arcane['idle_2'] = new Image();
+            Sprite.playermodels_arcane['idle_2'].src = '/client/assets/sprites/wizard_arcane/idle_4.png';
+            Sprite.playermodels_arcane['idle_3'] = new Image();
+            Sprite.playermodels_arcane['idle_3'].src = '/client/assets/sprites/wizard_arcane/idle_3.png';
+            Sprite.playermodels_arcane['run_1'] = new Image();
+            Sprite.playermodels_arcane['run_1'].src = '/client/assets/sprites/wizard_arcane/run_1.png';
+            Sprite.playermodels_arcane['run_2'] = new Image();
+            Sprite.playermodels_arcane['run_2'].src = '/client/assets/sprites/wizard_arcane/run_2.png';
+            Sprite.playermodels_arcane['run_3'] = new Image();
+            Sprite.playermodels_arcane['run_3'].src = '/client/assets/sprites/wizard_arcane/run_3.png';
+            Sprite.playermodels_arcane['run_4'] = new Image();
+            Sprite.playermodels_arcane['run_4'].src = '/client/assets/sprites/wizard_arcane/run_4.png';
+            Sprite.playermodels_arcane['hurt'] = new Image();
+            Sprite.playermodels_arcane['hurt'].src = '/client/assets/sprites/wizard_arcane/hurt_1.png';
 
 
 //init
@@ -123,6 +152,8 @@ $(function(){
                 self.model = initPack.model;
                 self.walking = initPack.walking;
                 self.hurt = initPack.hurt;
+                self.level = initPack.level;
+                self.experience = initPack.experience;
                 self.draw = function () {
                     if (Player.list[selfId].map !== self.map)
                         return;
@@ -132,57 +163,165 @@ $(function(){
                     var hpWidth = 30 * self.hp / self.maxHp;
                     ctx.fillStyle = 'red';
                     ctx.fillRect(x - hpWidth / 2, y - 40, hpWidth, 4);
+                    ctx.fillStyle = 'black';
+                    ctx.fillText("Lv: " + self.level, x, y+60);
+                    ctx.fillText(self.id, x-15, y-45);
 
                     var width = Sprite.player.width / 7;
                     var height = Sprite.player.height / 7;
 
-                    if (self.hurt) {
-                        self.model = 'hurt';
-                        if (self.model === 'hurt') {
-                            ctx.drawImage(Sprite.playermodels['hurt'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
-                        }
-                    } else {
-                        if (!self.walking) {
-                            if (self.model === 'default' || self.model === 'run_1' || self.model === 'run_2' || self.model === 'run_3' || self.model === 'run_4') {
-                                ctx.drawImage(Sprite.playermodels['idle_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
-                                setTimeout(function () {
-                                    self.model = 'idle_1'
-                                }, 400);
+
+                    //DRAWING OF ANIMATION
+                    //IF PLAYER GUTS HURT ANIMATE HIS MODEL ACCORDINGLY
+                    if(self.level >=0 && self.level <3){
+
+
+                        if (self.hurt) {
+                                self.model = 'hurt';
+                                if (self.model === 'hurt') {
+                                    ctx.drawImage(Sprite.playermodels_fire['hurt'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                }
+                            } else { //IF PLAYER IS IDLE DRAW HIS ANIMATION ACCORDINGLY WITH 2 STEPS STATES
+                                if (!self.walking) {
+                                    if (self.model === 'default' || self.model === 'run_1' || self.model === 'run_2' || self.model === 'run_3' || self.model === 'run_4') {
+                                        ctx.drawImage(Sprite.playermodels_fire['idle_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                        setTimeout(function () {
+                                            self.model = 'idle_1'
+                                        }, 400);
+                                    }
+                                    if (self.model === 'idle_1') {
+                                        ctx.drawImage(Sprite.playermodels_fire['idle_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                        setTimeout(function () {
+                                            self.model = 'default'
+                                        }, 400);
+                                    }
+                                } else { //IF PLAYER IS WALKING DRAW HIS ANIMATION ACCORDINGLY WITH 4 STEPS STATES
+                                    if (self.model === 'default' || self.model === 'idle_1') {
+                                        ctx.drawImage(Sprite.playermodels_fire['run_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                        setTimeout(function () {
+                                            self.model = 'run_2'
+                                        }, 150);
+                                    }
+                                    if (self.model === 'run_2') {
+                                        ctx.drawImage(Sprite.playermodels_fire['run_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                        setTimeout(function () {
+                                            self.model = 'run_3'
+                                        }, 150);
+                                    }
+                                    if (self.model === 'run_3') {
+                                        ctx.drawImage(Sprite.playermodels_fire['run_3'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                        setTimeout(function () {
+                                            self.model = 'run_4'
+                                        }, 150);
+                                    }
+                                    if (self.model === 'run_4') {
+                                        ctx.drawImage(Sprite.playermodels_fire['run_4'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                        setTimeout(function () {
+                                            self.model = 'default'
+                                        }, 150);
+                                    }
+
+                                }
+
                             }
-                            if (self.model === 'idle_1') {
-                                ctx.drawImage(Sprite.playermodels['idle_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
-                                setTimeout(function () {
-                                    self.model = 'default'
-                                }, 400);
+                    }else if(self.level >=3 && self.level < 6){
+                        if (self.hurt) {
+                            self.model = 'hurt';
+                            if (self.model === 'hurt') {
+                                ctx.drawImage(Sprite.playermodels_frost['hurt'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
                             }
-                        } else {
-                            if (self.model === 'default' || self.model === 'idle_1') {
-                                ctx.drawImage(Sprite.playermodels['run_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
-                                setTimeout(function () {
-                                    self.model = 'run_2'
-                                }, 150);
-                            }
-                            if (self.model === 'run_2') {
-                                ctx.drawImage(Sprite.playermodels['run_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
-                                setTimeout(function () {
-                                    self.model = 'run_3'
-                                }, 150);
-                            }
-                            if (self.model === 'run_3') {
-                                ctx.drawImage(Sprite.playermodels['run_3'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
-                                setTimeout(function () {
-                                    self.model = 'run_4'
-                                }, 150);
-                            }
-                            if (self.model === 'run_4') {
-                                ctx.drawImage(Sprite.playermodels['run_4'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
-                                setTimeout(function () {
-                                    self.model = 'default'
-                                }, 150);
+                        } else { //IF PLAYER IS IDLE DRAW HIS ANIMATION ACCORDINGLY WITH 2 STEPS STATES
+                            if (!self.walking) {
+                                if (self.model === 'default' || self.model === 'run_1' || self.model === 'run_2' || self.model === 'run_3' || self.model === 'run_4') {
+                                    ctx.drawImage(Sprite.playermodels_frost['idle_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'idle_1'
+                                    }, 400);
+                                }
+                                if (self.model === 'idle_1') {
+                                    ctx.drawImage(Sprite.playermodels_frost['idle_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'default'
+                                    }, 400);
+                                }
+                            } else { //IF PLAYER IS WALKING DRAW HIS ANIMATION ACCORDINGLY WITH 4 STEPS STATES
+                                if (self.model === 'default' || self.model === 'idle_1') {
+                                    ctx.drawImage(Sprite.playermodels_frost['run_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'run_2'
+                                    }, 150);
+                                }
+                                if (self.model === 'run_2') {
+                                    ctx.drawImage(Sprite.playermodels_frost['run_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'run_3'
+                                    }, 150);
+                                }
+                                if (self.model === 'run_3') {
+                                    ctx.drawImage(Sprite.playermodels_frost['run_3'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'run_4'
+                                    }, 150);
+                                }
+                                if (self.model === 'run_4') {
+                                    ctx.drawImage(Sprite.playermodels_frost['run_4'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'default'
+                                    }, 150);
+                                }
+
                             }
 
                         }
+                    }else if(self.level >=6 ){
+                        if (self.hurt) {
+                            self.model = 'hurt';
+                            if (self.model === 'hurt') {
+                                ctx.drawImage(Sprite.playermodels_arcane['hurt'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                            }
+                        } else { //IF PLAYER IS IDLE DRAW HIS ANIMATION ACCORDINGLY WITH 2 STEPS STATES
+                            if (!self.walking) {
+                                if (self.model === 'default' || self.model === 'run_1' || self.model === 'run_2' || self.model === 'run_3' || self.model === 'run_4') {
+                                    ctx.drawImage(Sprite.playermodels_arcane['idle_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'idle_1'
+                                    }, 400);
+                                }
+                                if (self.model === 'idle_1') {
+                                    ctx.drawImage(Sprite.playermodels_arcane['idle_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'default'
+                                    }, 400);
+                                }
+                            } else { //IF PLAYER IS WALKING DRAW HIS ANIMATION ACCORDINGLY WITH 4 STEPS STATES
+                                if (self.model === 'default' || self.model === 'idle_1') {
+                                    ctx.drawImage(Sprite.playermodels_arcane['run_1'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'run_2'
+                                    }, 150);
+                                }
+                                if (self.model === 'run_2') {
+                                    ctx.drawImage(Sprite.playermodels_arcane['run_2'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'run_3'
+                                    }, 150);
+                                }
+                                if (self.model === 'run_3') {
+                                    ctx.drawImage(Sprite.playermodels_arcane['run_3'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'run_4'
+                                    }, 150);
+                                }
+                                if (self.model === 'run_4') {
+                                    ctx.drawImage(Sprite.playermodels_arcane['run_4'], 0, 0, Sprite.player.width, Sprite.player.height, x - width / 2, y - height / 2, width, height);
+                                    setTimeout(function () {
+                                        self.model = 'default'
+                                    }, 150);
+                                }
 
+                            }
+
+                        }
                     }
 
 
@@ -210,7 +349,14 @@ $(function(){
 
                     var x = self.x - Player.list[selfId].x + WIDTH / 2;
                     var y = self.y - Player.list[selfId].y + HEIGHT / 2;
-                    ctx.drawImage(Sprite.bullet, 0, 0, Sprite.bullet.width, Sprite.bullet.height, x - width / 2, y - height / 2, width, height);
+                    if(Player.list[selfId].level >= 0 && Player.list[selfId].level < 3){
+                        ctx.drawImage(Sprite.bullet, 0, 0, Sprite.bullet.width, Sprite.bullet.height, x - width / 2, y - height / 2, width, height);
+                    }else if(Player.list[selfId].level >= 3 && Player.list[selfId].level < 6){
+                        ctx.drawImage(Sprite.bullet2, 0, 0, Sprite.bullet2.width, Sprite.bullet2.height, x - width / 2, y - height / 2, width, height);
+                    } else if(Player.list[selfId].level >= 6 && Player.list[selfId].level){
+                        ctx.drawImage(Sprite.bullet3, 0, 0, Sprite.bullet3.width, Sprite.bullet3.height, x - width / 2, y - height / 2, width, height);
+                    }
+
                 }
                 Bullet.list[self.id] = self;
                 return self;
@@ -233,7 +379,7 @@ $(function(){
 
 //update
 //changes on entities data are handled here
-
+//CHANGES ON PLAYER ENTITY
             socket.on('update', function (data) {
                 for (var i = 0; i < data.player.length; i++) {
                     var pack = data.player[i];
@@ -252,6 +398,10 @@ $(function(){
                             console.log(p.hurt);
                             p.hp = pack.hp;
                         }
+                        if(pack.experience !== undefined)
+                            p.experience = pack.experience;
+                        if(pack.level !== undefined)
+                            p.level = pack.level;
                         if (pack.score !== undefined)
                             p.score = pack.score;
                         if (pack.map !== undefined)
@@ -260,7 +410,7 @@ $(function(){
                             p.walking = pack.walking;
                     }
                 }
-
+//CHANGES ON BULLET ENTITY
                 for (var i = 0; i < data.bullet.length; i++) {
                     var pack = data.bullet[i];
                     var b = Bullet.list[data.bullet[i].id];
@@ -275,7 +425,7 @@ $(function(){
 
 //remove
 //removes id of entitites that are no longer used.
-
+//CHANGES ON ENTITIES THAT HAVE BEEN DELETED
 
             socket.on('remove', function (data) {
                 for (var i = 0; i < data.player.length; i++) {

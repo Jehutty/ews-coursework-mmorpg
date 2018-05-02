@@ -43,7 +43,7 @@ Database.getUserProgress = function(username, cb){
     if(!USE_DB)
         return cb({items:[]});
     db.progress.findOne({username:username}, function (err, res) {
-        cb({items:res.items, score:res.score});
+        cb({items:res.items, score:res.score, level:res.level, experience:res.experience});
     });
 }
 
@@ -53,5 +53,5 @@ Database.saveUserProgress = function (data, cb) {
     if(!USE_DB)
         return cb();
     db.progress.update({username:data.username}, data , {upsert:true}, cb);
-    db.usermodels.update({username:data.username}, {$set: {score: data.score} }, cb);
+    db.usermodels.update({username:data.username}, {$set: {score: data.score, level:data.level, experience:data.experience} }, cb);
 }

@@ -18,7 +18,7 @@ module.exports = function(app, express) {
     apiRouter.post('/register', function(req, res, next) {
 
             var user = new User(); // create a new instance of the User model
-            user.name = req.body.name; // set the users name (comes from the request)
+            // user.name = req.body.name; // set the users name (comes from the request)
             user.username = req.body.username; // set the users username (comes from the request)
             user.password = req.body.password; // set the users password (comes from the request)
             user.score = 0;
@@ -75,7 +75,6 @@ module.exports = function(app, express) {
                     // if user is found and password is right
                     // create a token
                     var token = jwt.sign({
-                        name: user.name,
                         username: user.username
                     }, superSecret, {
                         expiresIn: '24h' // expires in 24 hours
@@ -152,7 +151,7 @@ module.exports = function(app, express) {
         .post(function(req, res) {
 
             var user = new User(); // create a new instance of the User model
-            user.name = req.body.name; // set the users name (comes from the request)
+             // set the users name (comes from the request)
             user.username = req.body.username; // set the users username (comes from the request)
             user.password = req.body.password; // set the users password (comes from the request)
 
@@ -208,7 +207,7 @@ module.exports = function(app, express) {
                 if (err) res.send(err);
 
                 // set the new user information if it exists in the request
-                if (req.body.name) user.name = req.body.name;
+
                 if (req.body.username) user.username = req.body.username;
                 if (req.body.password) user.password = req.body.password;
 

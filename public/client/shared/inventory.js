@@ -35,33 +35,67 @@ Inventory = function(items, socket, server){
         return false;
     }
     self.refreshRender = function(){
+    //     server
+    //     if(self.server){
+    //         self.socket.emit('updateInventory',self.items);
+    //         self.socket.on('useItem',function(itemId){
+    //             let item = Item.list[itemId];
+    //             item.event(Player.list[self.socket.id]);
+    //         });
+    //         return;
+    //     }
+    //
+    //     //client only
+    //     var inventory = document.getElementById("inventory");
+    //     inventory.innerHTML = "";
+    //     var addButton = function(data){
+    //         let item = Item.list[data.id];
+    //         console.log(item.id);
+    //         var button = document.createElement('button');
+    //         button.id = 'potion';
+    //         button.onclick = function(){
+    //             self.socket.emit('useItem', item.id);
+    //         }
+    //         button.innerText = item.name + " x" + data.amount;
+    //         inventory.appendChild(button);
+    //     }
+    //     for(var i = 0 ; i < self.items.length; i++)
+    //         addButton(self.items[i]);
+    // }
         //server
         if(self.server){
-            self.socket.emit('updateInventory',self.items);
-            self.socket.on('useItem',function(itemId){
-                let item = Item.list[itemId];
-                item.event(Player.list[self.socket.id]);
-            });
+            self.socket.emit('updateInventory', self.items);
             return;
         }
-
-        //client only
+        //client
         var inventory = document.getElementById("inventory");
-        inventory.innerHTML = "";
-        var addButton = function(data){
+        inventory.innerHTML ="";
+        var addButton = function(data) {
             let item = Item.list[data.id];
-            console.log(item.id);
-            var button = document.createElement('button');
-            button.id = 'wow';
-            button.onclick = function(){
-                self.socket.emit('useItem', item.id);
+            let button = document.createElement('button');
+            button.onclick = function () {
+                self.socket.emit("useItem", item.id);
             }
             button.innerText = item.name + " x" + data.amount;
             inventory.appendChild(button);
         }
-        for(var i = 0 ; i < self.items.length; i++)
+        for (var i =0; i< self.items.length; i++){
             addButton(self.items[i]);
+        }
+        if(self.server){
+            self.socket.on("useItem", function(itemId){
+               if(!self.hasItem(itemId,1)){
+                   return;
+               }
+               let item = Item.list[itemId];
+               item.event(Player.list[self.socket.id]);
+
+            });
+        }
     }
+
+        //server
+
 
 
     return self;
