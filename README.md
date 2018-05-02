@@ -124,6 +124,6 @@ The player is only able to see and interact with players that are on the same ma
 # Functionality to be added
 I would like to introduce a marketplace so that users can buy items or unlock abilities depending on their level
 A kill death ratio implementation on the leaderboards.
-Other entities that players could take cover from.
+Other object entities that players could take cover from and destroy after hitting them a certain amount of times.
 
 
